@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maaf Ya 🥺</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffd1e3, #ffe9f3 50%, #ffc2d9);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    overflow: hidden;
+    padding: 16px;
+  }
+  .card {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    border-radius: 28px;
+    padding: 36px 28px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 18px 50px rgba(255, 105, 160, .35);
+    animation: pop .6s ease;
+  }
+  @keyframes pop {
+    from { transform: scale(.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .emoji { font-size: 64px; animation: bounce 1.6s infinite; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  h1 { color: #e0457b; font-size: 26px; margin: 12px 0; }
+  p { color: #555; line-height: 1.6; font-size: 16px; }
+  .name { color: #e0457b; font-weight: 700; }
+  .buttons {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 60px;
+  }
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 14px 26px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s, left .25s, top .25s;
+  }
+  #yes {
+    background: linear-gradient(135deg, #ff6aa2, #ff3d86);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(255, 61, 134, .45);
+  }
+  #yes:hover { transform: scale(1.08); }
+  #no {
+    background: #e6e6e6;
+    color: #777;
+  }
+  #no.run { position: fixed; z-index: 10; }
+  .heart {
+    position: fixed;
+    bottom: -40px;
+    z-index: 1;
+    pointer-events: none;
+    animation: floatUp linear forwards;
+  }
+  @keyframes floatUp {
+    to { transform: translateY(-115vh) rotate(25deg); opacity: 0; }
+  }
+  #thanks { display: none; }
+  #thanks h1 { font-size: 28px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div id="ask">
+    <div class="emoji">🥺</div>
+    <h1>Maaf Ya...</h1>
+    <p>
+      Maaf atas kelalaian yang telah dilakukan, karena telah mengabaikan kamu
+      selama <b>19 menit</b>, maaf sayaaa
+      <span class="name">Dion Keren</span> 💖
+    </p>
+    <div class="buttons">
+      <button id="yes">IYAAA AKU MAAFIN</button>
+      <button id="no">ENGGA</button>
+    </div>
+  </div>
+
+  <div id="thanks">
+    <div class="emoji">🥹</div>
+    <h1>MAKASI YAAA JEBEWW NA AKU🥹</h1>
+    <p>Aku sayang kamu 💕</p>
+  </div>
+</div>
+
+<script>
+  const yes = document.getElementById('yes');
+  const no = document.getElementById('no');
+  let scale = 1;
+
+  // Tombol ENGGA kabur & tidak bisa dipencet
+  function dodge(e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    no.classList.add('run');
+    const pad = 12;
+    const maxX = window.innerWidth - no.offsetWidth - pad;
+    const maxY = window.innerHeight - no.offsetHeight - pad;
+    no.style.left = Math.max(pad, Math.random() * maxX) + 'px';
+    no.style.top = Math.max(pad, Math.random() * maxY) + 'px';
+    // tombol IYAAA makin besar tiap ENGGA kabur
+    scale = Math.min(scale + 0.08, 1.6);
+    yes.style.transform = 'scale(' + scale + ')';
+  }
+  ['mouseover', 'mouseenter', 'pointerdown', 'touchstart', 'focus'].forEach(ev =>
+    no.addEventListener(ev, dodge, { passive: false })
+  );
+  no.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); dodge(); });
+  no.addEventListener('keydown', e => { e.preventDefault(); dodge(); });
+
+  // Hati melayang
+  function spawnHeart() {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = ['💖', '💕', '💗', '💓', '🌸'][Math.floor(Math.random() * 5)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.fontSize = (18 + Math.random() * 28) + 'px';
+    h.style.animationDuration = (4 + Math.random() * 4) + 's';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 9000);
+  }
+  setInterval(spawnHeart, 700);
+
+  // Jawaban IYA
+  yes.addEventListener('click', () => {
+    document.getElementById('ask').style.display = 'none';
+    no.style.display = 'none';
+    document.getElementById('thanks').style.display = 'block';
+    for (let i = 0; i < 40; i++) setTimeout(spawnHeart, i * 60);
+    setInterval(spawnHeart, 150);
+  });
+</script>
+</body>
+</html>
